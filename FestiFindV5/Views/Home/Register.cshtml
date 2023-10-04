@@ -1,0 +1,25 @@
+﻿<head>
+    <title>User Registration</title>
+</head>
+<body>
+    <h1>User Registration</h1>
+    <form method="post" action="/Account/Register">
+        <label for="UserName">Username:</label>
+        <input type="text" id="UserName" name="UserName" required /><br />
+
+        <label for="Password">Password:</label>
+        <input type="password" id="Password" name="Password" required /><br />
+
+        <label for="Email">Email:</label>
+        <input type="email" id="Email" name="Email" required /><br />
+
+        <label>Select Role:</label><br />
+        <input type="radio" id="RoleParticipant" name="UserRole" value="Participant" required />
+        <label for="RoleParticipant">Participant</label><br />
+
+        <input type="radio" id="RoleOrganizer" name="UserRole" value="Organizer" required />
+        <label for="RoleOrganizer">Organizer</label><br />
+
+        <button type="submit">Register</button>
+    </form>
+</body>

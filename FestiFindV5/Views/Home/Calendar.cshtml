@@ -1,0 +1,84 @@
+﻿@{
+    ViewData["Title"] = "Kalender";
+    DateTime endDate = new DateTime(2024, 12, 31);
+    DateTime currentDate = DateTime.Today;
+    DateTime startDate = new DateTime(2023, 9, 1); // Corrected month format
+}
+
+@using FestiFindV5.Models;
+<body>
+    @for (var loopDate = startDate; loopDate <= endDate; loopDate = loopDate.AddMonths(1))
+    {
+        int daysInMonth = DateTime.DaysInMonth(loopDate.Year, loopDate.Month);
+        <div class="month">
+            <ul>
+                <li>@loopDate.ToString("MMMM")</li>
+                <li>@loopDate.ToString("yyy")</li>
+
+            </ul>
+        </div>
+        <ul class="weekdays">
+            <li>Ma</li>
+            <li>Di</li>
+            <li>Wo</li>
+            <li>Do</li>
+            <li>Vr</li>
+            <li>Za</li>
+            <li>Zo</li>
+        </ul>
+        <ul class="days">
+            @{
+                DateTime firstDayOfMonth = new DateTime(loopDate.Year, loopDate.Month, 1);
+
+                // Calculate daysOffset based on the day of the week
+                int daysOffset = (int)firstDayOfMonth.DayOfWeek;
+                if (daysOffset == 0) daysOffset = 7; // Adjust for Sunday being 0
+
+                // Add empty placeholders for days before the first day of the month
+                for (int i = 1; i < daysOffset; i++)
+                {
+                    <li></li>
+                }
+
+                // Loop through the days of the month
+                for (int day = 1; day <= daysInMonth; day++)
+                {
+                    bool isCurrentMonth = loopDate.Month == currentDate.Month && loopDate.Year == currentDate.Year;
+                    bool isCurrentDay = isCurrentMonth && day == currentDate.Day;
+                    string cssClass = isCurrentDay ? "active" : "";
+
+                    // Check if the day is within the valid range for the month
+                    if (day >= 1 && day <= daysInMonth)
+                    {
+                        // Check if there is an event for the current date
+                        string eventTitle = "";
+                        string eventUrl = ""; // URL for the event details page
+                        foreach (var e in Model)
+                        {
+                            if (e.Date_Time.Year == loopDate.Year && e.Date_Time.Month == loopDate.Month && e.Date_Time.Day == day)
+                            {
+                                eventTitle = e.Name;
+                                eventUrl = "/Events/Details/" + e.Id;
+                                break;
+                            }
+                        }
+
+                        <li class="@cssClass">
+                            <span>@day</span>
+                            <div class="event-title">
+                                @if (!string.IsNullOrEmpty(eventUrl))
+                                {
+                                    <a href="@eventUrl" class="purple-link">@eventTitle</a>
+                                }
+                                else
+                                {
+                                    @eventTitle
+                                }
+                            </div>
+                        </li>
+                    }
+                }
+            }
+        </ul>
+    }
+</body>
