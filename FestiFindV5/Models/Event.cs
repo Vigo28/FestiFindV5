@@ -24,5 +24,10 @@ namespace FestFindV2.Models
 
         public List<Participant> Participants { get; set; } = new List<Participant>();
         public List<Cashier> Cashiers { get; set; } = new List<Cashier>();
+
+        public Event()
+        {
+
+        }
     }
 }

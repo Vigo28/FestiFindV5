@@ -36,7 +36,7 @@ namespace FestiFindV5.Controllers
             }
 
             var @event = await _context.Events
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(e => e.Id == id);
             if (@event == null)
             {
                 return NotFound();
