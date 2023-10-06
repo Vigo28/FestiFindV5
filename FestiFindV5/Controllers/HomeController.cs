@@ -1,6 +1,7 @@
 ﻿using FestFindV2.Models;
 using FestiFindV5.Data;
 using FestiFindV5.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -24,7 +25,6 @@ namespace FestiFindV5.Controllers
 
             return View(events);
         }
-
         public IActionResult Calendar(string month)
         {
             DateTime currentDate = DateTime.Today;

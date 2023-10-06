@@ -10,6 +10,8 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading;
 using System.Threading.Tasks;
+using FestFindV2.Models;
+using FestiFindV5.Data;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -17,6 +19,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace FestiFindV5.Areas.Identity.Pages.Account
@@ -29,13 +32,15 @@ namespace FestiFindV5.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<IdentityUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly ApplicationDbContext _dbContext;
 
         public RegisterModel(
             UserManager<IdentityUser> userManager,
             IUserStore<IdentityUser> userStore,
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            ApplicationDbContext dbContext)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -43,6 +48,7 @@ namespace FestiFindV5.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _dbContext = dbContext;
         }
 
         /// <summary>
@@ -78,7 +84,9 @@ namespace FestiFindV5.Areas.Identity.Pages.Account
             [EmailAddress]
             [Display(Name = "Email")]
             public string Email { get; set; }
-
+            [Required]
+            [Display(Name = "Naam")]
+            public string Name { get; set; }
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
@@ -86,7 +94,7 @@ namespace FestiFindV5.Areas.Identity.Pages.Account
             [Required]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
             [DataType(DataType.Password)]
-            [Display(Name = "Password")]
+            [Display(Name = "Wachtwoord")]
             public string Password { get; set; }
 
             /// <summary>
@@ -94,9 +102,12 @@ namespace FestiFindV5.Areas.Identity.Pages.Account
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             [DataType(DataType.Password)]
-            [Display(Name = "Confirm password")]
+            [Display(Name = "Herhaal wachtwoord")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+            [Required]
+            [Display(Name = "Rol")]
+            public string Role { get; set; }
         }
 
 
@@ -113,23 +124,45 @@ namespace FestiFindV5.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
+                user.UserName = Input.Name; // Set the UserName to Input.Name
 
-                await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
+
                 var result = await _userManager.CreateAsync(user, Input.Password);
+
 
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
 
+                    if (Input.Role == "organizer")
+                    {
+                        // Here, add the new "organizer" to the database with the entered name
+                        var organizer = new Organizer { Name = Input.Name, EMail = Input.Email, Password = Input.Password };
+                        _dbContext.Organizers.Add(organizer);
+                        await _userManager.AddToRoleAsync(user, "Organizer");
+                    }
+                    else if (Input.Role == "participant")
+                    {
+                        // Here, add the new "participant" to the database with the entered name
+                        var participant = new Participant { Name = Input.Name, EMail = Input.Email, Password = Input.Password };
+                        _dbContext.Participants.Add(participant);
+                        await _userManager.AddToRoleAsync(user, "Participant");
+
+                    }
+
+                    // Save changes to the respective tables (organizer or participant)
+                    await _dbContext.SaveChangesAsync();
+
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                     var callbackUrl = Url.Page(
-                        "/Account/ConfirmEmail",
-                        pageHandler: null,
-                        values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
-                        protocol: Request.Scheme);
+                    "/Account/ConfirmEmail",
+                    pageHandler: null,
+                    values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
+                    protocol: Request.Scheme); // Add 'protocol:' before 'Request.Scheme'
+
 
                     await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
                         $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
@@ -150,9 +183,10 @@ namespace FestiFindV5.Areas.Identity.Pages.Account
                 }
             }
 
-            // If we got this far, something failed, redisplay form
+            // If we got this far, something failed, redisplay the form
             return Page();
         }
+
 
         private IdentityUser CreateUser()
         {

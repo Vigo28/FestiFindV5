@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FestFindV2.Models;
 using FestiFindV5.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FestiFindV5.Controllers
 {
@@ -44,6 +45,7 @@ namespace FestiFindV5.Controllers
 
             return View(@event);
         }
+        [Authorize(Roles = "Organizer")]
 
         // GET: Events/Create
         public IActionResult Create()
@@ -68,6 +70,8 @@ namespace FestiFindV5.Controllers
         }
 
         // GET: Events/Edit/5
+        [Authorize(Roles = "Organizer")]
+
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Events == null)
@@ -88,6 +92,8 @@ namespace FestiFindV5.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Organizer")]
+
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Category,Location,Date_Time,Costs,MaxParticipants")] Event @event)
         {
             if (id != @event.Id)
@@ -119,6 +125,8 @@ namespace FestiFindV5.Controllers
         }
 
         // GET: Events/Delete/5
+        [Authorize(Roles = "Organizer")]
+
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Events == null)
@@ -139,6 +147,8 @@ namespace FestiFindV5.Controllers
         // POST: Events/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Organizer")]
+
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Events == null)
