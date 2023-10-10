@@ -48,7 +48,7 @@ namespace FestiFindV5.Controllers
         // GET: Orders/Create
         public IActionResult Create()
         {
-            ViewData["EventId"] = new SelectList(_context.Events, "Id", "Category");
+            ViewData["Event"] = new SelectList(_context.Events, "Id", "Name");
             return View();
         }
 
