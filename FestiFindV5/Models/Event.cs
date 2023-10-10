@@ -19,7 +19,7 @@ namespace FestFindV2.Models
         [Required]
         public float Costs { get; set; }
         [Required]
-        public int MaxParticipants { get; set; }
+        public int PlacesLeft { get; set; }
         public ICollection<Order>? Orders { get; set; } // Navigation property to the Order entity
 
         public List<Participant> Participants { get; set; } = new List<Participant>();

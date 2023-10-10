@@ -31,7 +31,7 @@
                 @Html.DisplayNameFor(model => model.Costs)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.MaxParticipants)
+                @Html.DisplayNameFor(model => model.PlacesLeft)
             </th>
             <th></th>
         </tr>
@@ -58,7 +58,7 @@
                 @Html.DisplayFor(modelItem => item.Costs)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.MaxParticipants)
+                    @Html.DisplayFor(modelItem => item.PlacesLeft)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

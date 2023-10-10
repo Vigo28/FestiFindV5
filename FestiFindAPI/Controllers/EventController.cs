@@ -33,22 +33,22 @@ namespace FestiFindAPI.Controllers
 
         // POST api/<EventController>
         [HttpPost]
-        public void Post(string Name, string Description, string Category, string Location, DateTime Date_Time, float Costs, int MaxParticipants)
+        public void Post(string Name, string Description, string Category, string Location, DateTime Date_Time, float Costs, int PlacesLeft)
         {
             Event e = new Event();
-            e.Name = Name; e.Description = Description; e.Category = Category; e.Location = Location; e.Date_Time = Date_Time; e.Costs = Costs; e.MaxParticipants = MaxParticipants;
+            e.Name = Name; e.Description = Description; e.Category = Category; e.Location = Location; e.Date_Time = Date_Time; e.Costs = Costs; e.PlacesLeft = PlacesLeft;
             _context.Events.Add(e); 
             _context.SaveChanges();
         }
 
         // PUT api/<EventController>/5
         [HttpPut("{id}")]
-        public void Put(int id, string Name, string Description, string Category, string Location, DateTime Date_Time, float Costs, int MaxParticipants)
+        public void Put(int id, string Name, string Description, string Category, string Location, DateTime Date_Time, float Costs, int PlacesLeft)
         {
             Event EventUpdate = _context.Events.FirstOrDefault(e => e.Id == id);
             if (EventUpdate != null)
             {
-                EventUpdate.Name = Name; EventUpdate.Description = Description; EventUpdate.Category = Category; EventUpdate.Location = Location; EventUpdate.Date_Time = Date_Time; EventUpdate.Costs = Costs; EventUpdate.MaxParticipants = MaxParticipants;
+                EventUpdate.Name = Name; EventUpdate.Description = Description; EventUpdate.Category = Category; EventUpdate.Location = Location; EventUpdate.Date_Time = Date_Time; EventUpdate.Costs = Costs; EventUpdate.PlacesLeft = PlacesLeft;
                 _context.Update(EventUpdate);
                 _context.SaveChanges();
             }

@@ -58,7 +58,7 @@ namespace FestiFindV5.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description,Category,Location,Date_Time,Costs,MaxParticipants")] Event @event)
+        public async Task<IActionResult> Create([Bind("Id,Name,Description,Category,Location,Date_Time,Costs,PlacesLeft")] Event @event)
         {
             if (ModelState.IsValid)
             {
@@ -94,7 +94,7 @@ namespace FestiFindV5.Controllers
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Organizer")]
 
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Category,Location,Date_Time,Costs,MaxParticipants")] Event @event)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Category,Location,Date_Time,Costs,PlacesLeft")] Event @event)
         {
             if (id != @event.Id)
             {
