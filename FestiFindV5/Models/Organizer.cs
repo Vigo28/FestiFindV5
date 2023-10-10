@@ -11,8 +11,6 @@ namespace FestFindV2.Models
         public string? Name { get; set; }
         [Required]
         public string? EMail { get; set; }
-        [Required]
-
         public string? Password { get; set; }
         public List<Event> events { get; set; } = new List<Event>();
 
