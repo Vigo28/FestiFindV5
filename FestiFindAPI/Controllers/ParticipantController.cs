@@ -27,7 +27,7 @@ namespace FestiFindAPI.Controllers
         [HttpGet("{id}")]
         public Participant Get(int id)
         {
-            return _context.Participants.FirstOrDefault(e => e.Id == id);
+            return _context.Participants.FirstOrDefault(p => p.Id == id);
         }
 
         // POST api/<EventController>

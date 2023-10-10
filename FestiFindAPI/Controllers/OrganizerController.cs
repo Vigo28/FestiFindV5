@@ -27,7 +27,7 @@ namespace FestiFindAPI.Controllers
         [HttpGet("{id}")]
         public Organizer Get(int id)
         {
-            return _context.Organizers.FirstOrDefault(e => e.Id == id);
+            return _context.Organizers.FirstOrDefault(o => o.Id == id);
         }
 
         // POST api/<EventController>
