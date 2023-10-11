@@ -18,6 +18,10 @@ namespace FestiFindAPI.Controllers
             _context = context;
         }
         // GET: api/<EventController>
+        /// <summary>
+        /// Get all events
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public IEnumerable<Event> Get()
         {
@@ -25,6 +29,11 @@ namespace FestiFindAPI.Controllers
         }
 
         // GET api/<EventController>/5
+        /// <summary>
+        /// Get event by id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("{id}")]
         public Event Get(int id)
         {
@@ -32,6 +41,16 @@ namespace FestiFindAPI.Controllers
         }
 
         // POST api/<EventController>
+        /// <summary>
+        /// Create new event
+        /// </summary>
+        /// <param name="Name"></param>
+        /// <param name="Description"></param>
+        /// <param name="Category"></param>
+        /// <param name="Location"></param>
+        /// <param name="Date_Time"></param>
+        /// <param name="Costs"></param>
+        /// <param name="PlacesLeft"></param>
         [HttpPost]
         public void Post(string Name, string Description, string Category, string Location, DateTime Date_Time, float Costs, int PlacesLeft)
         {
@@ -42,6 +61,17 @@ namespace FestiFindAPI.Controllers
         }
 
         // PUT api/<EventController>/5
+        /// <summary>
+        /// Edit event
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="Name"></param>
+        /// <param name="Description"></param>
+        /// <param name="Category"></param>
+        /// <param name="Location"></param>
+        /// <param name="Date_Time"></param>
+        /// <param name="Costs"></param>
+        /// <param name="PlacesLeft"></param>
         [HttpPut("{id}")]
         public void Put(int id, string Name, string Description, string Category, string Location, DateTime Date_Time, float Costs, int PlacesLeft)
         {
@@ -55,6 +85,10 @@ namespace FestiFindAPI.Controllers
         }
 
         // DELETE api/<EventController>/5
+        /// <summary>
+        /// Delete event
+        /// </summary>
+        /// <param name="id"></param>
         [HttpDelete("{id}")]
         public void Delete(int id)
         {

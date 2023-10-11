@@ -17,6 +17,10 @@ namespace FestiFindAPI.Controllers
             _context = context;
         }
         // GET: api/<EventController>
+        /// <summary>
+        /// Get all orders
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public IEnumerable<Order> Get()
         {
@@ -24,6 +28,11 @@ namespace FestiFindAPI.Controllers
         }
 
         // GET api/<EventController>/5
+        /// <summary>
+        /// Get order by id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("{id}")]
         public Order Get(int id)
         {
@@ -31,6 +40,11 @@ namespace FestiFindAPI.Controllers
         }
 
         // POST api/<EventController>
+        /// <summary>
+        /// Create new order
+        /// </summary>
+        /// <param name="EventId"></param>
+        /// <param name="Payed"></param>
         [HttpPost]
         public void Post(int EventId, bool Payed)
         {
@@ -41,6 +55,12 @@ namespace FestiFindAPI.Controllers
         }
 
         // PUT api/<EventController>/5
+        /// <summary>
+        /// Edit order
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="EventId"></param>
+        /// <param name="Payed"></param>
         [HttpPut("{id}")]
         public void Put(int id, int EventId, bool Payed)
         {
@@ -54,6 +74,10 @@ namespace FestiFindAPI.Controllers
         }
 
         // DELETE api/<EventController>/5
+        /// <summary>
+        /// Delete order
+        /// </summary>
+        /// <param name="id"></param>
         [HttpDelete("{id}")]
         public void Delete(int id)
         {

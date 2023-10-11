@@ -17,6 +17,10 @@ namespace FestiFindAPI.Controllers
             _context = context;
         }
         // GET: api/<EventController>
+        /// <summary>
+        /// Get all cashiers
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public IEnumerable<Cashier> Get()
         {
@@ -24,6 +28,11 @@ namespace FestiFindAPI.Controllers
         }
 
         // GET api/<EventController>/5
+        /// <summary>
+        /// Get cashier by id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("{id}")]
         public Cashier Get(int id)
         {
@@ -31,6 +40,10 @@ namespace FestiFindAPI.Controllers
         }
 
         // POST api/<EventController>
+        /// <summary>
+        /// Create new cashier
+        /// </summary>
+        /// <param name="Name"></param>
         [HttpPost]
         public void Post(string Name)
         {
@@ -41,6 +54,11 @@ namespace FestiFindAPI.Controllers
         }
 
         // PUT api/<EventController>/5
+        /// <summary>
+        /// Edit cashier
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="Name"></param>
         [HttpPut("{id}")]
         public void Put(int id, string Name)
         {
@@ -54,6 +72,10 @@ namespace FestiFindAPI.Controllers
         }
 
         // DELETE api/<EventController>/5
+        /// <summary>
+        /// Delete cashier
+        /// </summary>
+        /// <param name="id"></param>
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
