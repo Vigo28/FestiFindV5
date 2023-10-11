@@ -9,8 +9,9 @@ namespace FestiFindV5.Models
         public int Id { get; set; }
         [Required]
         public string? Name { get; set; }
-        [Required]
+        [Display(Name = "Image")]
         public byte[]? Image { get; set; }
+
         public ICollection<Event>? Events { get; set; } // Navigation property to the Event entity
     }
 }
