@@ -6,11 +6,10 @@ namespace FestFindV2.Models
     {
         [Key]
         public int Id { get; set; }
-
+        [Required] 
+        public int? ParticipantId { get; set; }
         [Required]
         public int? EventId { get; set; }
-        public Event? Event { get; set; } // Navigation property to the Event entity
-
         [Required]
         public bool Payed { get; set; }
     }

@@ -15,7 +15,7 @@
             @Html.DisplayNameFor(model => model.Event)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Event.Category)
+            @Html.DisplayFor(model => model.Event.Name)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Payed)
@@ -24,7 +24,8 @@
             @Html.DisplayFor(model => model.Payed)
         </dd>
     </dl>
-    
+    <br />
+
     <form asp-action="Delete">
         <input type="hidden" asp-for="Id" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |

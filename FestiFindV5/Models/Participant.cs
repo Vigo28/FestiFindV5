@@ -12,7 +12,7 @@ namespace FestFindV2.Models
         [Required]
         public string? EMail { get; set; }
         public string? Password { get; set; }
-        public List<Order>? Orders { get; set; } = new List<Order>();
+        public virtual ICollection<Order>? Orders { get; set; }
 
         public static void ShowTickets(Order orderId)
         {
