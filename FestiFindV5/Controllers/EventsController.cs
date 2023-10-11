@@ -169,5 +169,36 @@ namespace FestiFindV5.Controllers
         {
           return (_context.Events?.Any(e => e.Id == id)).GetValueOrDefault();
         }
+        public IActionResult CreateOrder(int eventId)
+        {
+            // Get the username of the logged-in user
+            string username = User.Identity.Name;
+
+            // Assuming you have a data store where you associate participants with usernames
+            var participant = _context.Participants.SingleOrDefault(p => p.Name == username);
+
+            if (participant != null)
+            {
+                var order = new Order
+                {
+                    ParticipantId = participant.Id,
+                    EventId = eventId,
+                };
+
+                // Save the order to your database
+                _context.Orders.Add(order);
+                _context.SaveChanges();
+
+                // Redirect to the Order Detail page for the newly created order
+                return RedirectToAction("Details", "Orders", new { id = order.Id });
+            }
+            else
+            {
+                // Handle the case where the user is not a participant
+                // You can return an error message or redirect to a page, as needed
+                // For example, redirect to a page that displays an error message.
+                return RedirectToAction("ErrorPage");
+            }
+        }
     }
 }

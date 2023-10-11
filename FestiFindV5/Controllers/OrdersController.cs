@@ -22,9 +22,15 @@ namespace FestiFindV5.Controllers
         // GET: Orders
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Orders.Include(o => o.Event);
-            return View(await applicationDbContext.ToListAsync());
+            var orders = await _context.Orders
+                .Include(o => o.Participant) // Include the Participant navigation property
+                .Include(o => o.Event) // Include the Event navigation property
+                .ToListAsync();
+
+            return View(orders);
         }
+
+
 
         // GET: Orders/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -35,8 +41,10 @@ namespace FestiFindV5.Controllers
             }
 
             var order = await _context.Orders
-                .Include(o => o.Event)
+                .Include(o => o.Participant) // Load the related Participant
+                .Include(o => o.Event) // Load the related Event
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (order == null)
             {
                 return NotFound();
@@ -45,19 +53,22 @@ namespace FestiFindV5.Controllers
             return View(order);
         }
 
+
         // GET: Orders/Create
         public IActionResult Create()
         {
-            ViewData["Event"] = new SelectList(_context.Events, "Id", "Name");
+            ViewBag.ParticipantId = new SelectList(_context.Participants, "Id", "Name");
+            ViewBag.EventId = new SelectList(_context.Events, "Id", "Name");
             return View();
         }
+
 
         // POST: Orders/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,EventId,Payed")] Order order)
+        public async Task<IActionResult> Create([Bind("Id,ParticipantId,EventId,Payed")] Order order)
         {
             if (ModelState.IsValid)
             {
@@ -65,7 +76,6 @@ namespace FestiFindV5.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["EventId"] = new SelectList(_context.Events, "Id", "Category", order.EventId);
             return View(order);
         }
 
@@ -82,7 +92,6 @@ namespace FestiFindV5.Controllers
             {
                 return NotFound();
             }
-            ViewData["EventId"] = new SelectList(_context.Events, "Id", "Category", order.EventId);
             return View(order);
         }
 
@@ -91,7 +100,7 @@ namespace FestiFindV5.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,EventId,Payed")] Order order)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,ParticipantId,EventId,Payed")] Order order)
         {
             if (id != order.Id)
             {
@@ -118,7 +127,6 @@ namespace FestiFindV5.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["EventId"] = new SelectList(_context.Events, "Id", "Category", order.EventId);
             return View(order);
         }
 
@@ -131,7 +139,6 @@ namespace FestiFindV5.Controllers
             }
 
             var order = await _context.Orders
-                .Include(o => o.Event)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (order == null)
             {

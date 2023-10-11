@@ -46,10 +46,10 @@ namespace FestiFindAPI.Controllers
         /// <param name="EventId"></param>
         /// <param name="Payed"></param>
         [HttpPost]
-        public void Post(int EventId, bool Payed)
+        public void Post(int EventId, int ParticipantId, bool Payed)
         {
             Order o = new Order();
-            o.EventId = EventId; o.Payed = Payed;
+            o.EventId = EventId; o.ParticipantId = ParticipantId; o.Payed = Payed;
             _context.Orders.Add(o);
             _context.SaveChanges();
         }
@@ -62,12 +62,13 @@ namespace FestiFindAPI.Controllers
         /// <param name="EventId"></param>
         /// <param name="Payed"></param>
         [HttpPut("{id}")]
-        public void Put(int id, int EventId, bool Payed)
+        public void Put(int id, int EventId, int ParticipantId, bool Payed)
         {
             Order OrderUpdate = _context.Orders.FirstOrDefault(o => o.Id == id);
             if (OrderUpdate != null)
             {
-                OrderUpdate.EventId = EventId; OrderUpdate.Payed = Payed;
+                OrderUpdate.EventId = EventId; OrderUpdate.ParticipantId = ParticipantId; OrderUpdate.Payed = Payed;
+
                 _context.Update(OrderUpdate);
                 _context.SaveChanges();
             }

@@ -12,5 +12,9 @@ namespace FestFindV2.Models
         public int? EventId { get; set; }
         [Required]
         public bool Payed { get; set; }
+
+        // Define navigation properties to access related data
+        public Participant Participant { get; set; }
+        public Event Event { get; set; }
     }
 }
