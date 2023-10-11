@@ -46,16 +46,16 @@ namespace FestiFindAPI.Controllers
         /// </summary>
         /// <param name="Name"></param>
         /// <param name="Description"></param>
-        /// <param name="Category"></param>
+        /// <param name="CategoryId"></param>
         /// <param name="Location"></param>
         /// <param name="Date_Time"></param>
         /// <param name="Costs"></param>
         /// <param name="PlacesLeft"></param>
         [HttpPost]
-        public void Post(string Name, string Description, string Category, string Location, DateTime Date_Time, float Costs, int PlacesLeft)
+        public void Post(string Name, string Description, int CategoryId, string Location, DateTime Date_Time, float Costs, int PlacesLeft)
         {
             Event e = new Event();
-            e.Name = Name; e.Description = Description; e.Category = Category; e.Location = Location; e.Date_Time = Date_Time; e.Costs = Costs; e.PlacesLeft = PlacesLeft;
+            e.Name = Name; e.Description = Description; e.CategoryId = CategoryId; e.Location = Location; e.Date_Time = Date_Time; e.Costs = Costs; e.PlacesLeft = PlacesLeft;
             _context.Events.Add(e); 
             _context.SaveChanges();
         }
@@ -73,12 +73,12 @@ namespace FestiFindAPI.Controllers
         /// <param name="Costs"></param>
         /// <param name="PlacesLeft"></param>
         [HttpPut("{id}")]
-        public void Put(int id, string Name, string Description, string Category, string Location, DateTime Date_Time, float Costs, int PlacesLeft)
+        public void Put(int id, string Name, string Description, int CategoryId, string Location, DateTime Date_Time, float Costs, int PlacesLeft)
         {
             Event EventUpdate = _context.Events.FirstOrDefault(e => e.Id == id);
             if (EventUpdate != null)
             {
-                EventUpdate.Name = Name; EventUpdate.Description = Description; EventUpdate.Category = Category; EventUpdate.Location = Location; EventUpdate.Date_Time = Date_Time; EventUpdate.Costs = Costs; EventUpdate.PlacesLeft = PlacesLeft;
+                EventUpdate.Name = Name; EventUpdate.Description = Description; EventUpdate.CategoryId = CategoryId; EventUpdate.Location = Location; EventUpdate.Date_Time = Date_Time; EventUpdate.Costs = Costs; EventUpdate.PlacesLeft = PlacesLeft;
                 _context.Update(EventUpdate);
                 _context.SaveChanges();
             }

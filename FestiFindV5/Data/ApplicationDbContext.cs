@@ -1,4 +1,5 @@
 ﻿using FestFindV2.Models;
+using FestiFindV5.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,6 +16,8 @@ namespace FestiFindV5.Data
         public DbSet<Order> Orders { get; set; }
         public DbSet<Cashier> Cashiers { get; set; }
         public DbSet<Participant> Participants { get; set; }
+        public DbSet<Category> Category { get; set; }
+
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
