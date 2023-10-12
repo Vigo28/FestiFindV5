@@ -12,7 +12,7 @@ namespace FestFindV2.Models
         [Required]
         public string? EMail { get; set; }
         public string? Password { get; set; }
-        public List<Event> events { get; set; } = new List<Event>();
+        public ICollection<Event>? Events { get; set; } // Navigation property to the Event entity
 
         public static void CreateEvent()
         {

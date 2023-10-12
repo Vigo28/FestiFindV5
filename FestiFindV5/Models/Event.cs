@@ -21,12 +21,29 @@ namespace FestFindV2.Models
         public float? Costs { get; set; }
         [Required]
         public int? PlacesLeft { get; set; }
+        [Required]
+        public int? OrganizerId { get; set; }
         public ICollection<Order>? Orders { get; set; } // Navigation property to the Order entity
 
         public Category Category { get; set; } // Navigation property to the Category entity
         public Event()
         {
 
+        }
+        public void ReduceAvailableSpots()
+        {
+            if (PlacesLeft > 0)
+            {
+                PlacesLeft--;
+            }
+            else
+            {
+                throw new InvalidOperationException("Er zijn geen beschikbare plaatsen meer voor dit evenement.");
+            }
+        }
+        public void IncrementAvailableSpots()
+        {
+                PlacesLeft++;
         }
     }
 }

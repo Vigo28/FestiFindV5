@@ -23,7 +23,16 @@ namespace FestiFindV5.Controllers
         // GET: Events
         public async Task<IActionResult> Index()
         {
-              return _context.Events != null ? 
+            // Fetch the list of categories from your data source (replace _context and Categories with your actual data context and model).
+            var categories = _context.Category.ToList();
+
+            // Create a SelectList containing category names.
+            var categoryList = new SelectList(categories, "Id", "Name");
+
+            // Pass the SelectList to the view using ViewBag.
+            ViewBag.CategoryList = categoryList;
+
+            return _context.Events != null ? 
                           View(await _context.Events.ToListAsync()) :
                           Problem("Entity set 'ApplicationDbContext.Events'  is null.");
         }
@@ -42,7 +51,13 @@ namespace FestiFindV5.Controllers
             {
                 return NotFound();
             }
+            var categories = _context.Category.ToList();
 
+            // Create a SelectList containing category names.
+            var categoryList = new SelectList(categories, "Id", "Name");
+
+            // Pass the SelectList to the view using ViewBag.
+            ViewBag.CategoryList = categoryList;
             return View(@event);
         }
         [Authorize(Roles = "Organizer")]
@@ -50,6 +65,15 @@ namespace FestiFindV5.Controllers
         // GET: Events/Create
         public IActionResult Create()
         {
+            // Fetch the list of categories from your data source (replace _context and Categories with your actual data context and model).
+            var categories = _context.Category.ToList();
+
+            // Create a SelectList containing category names.
+            var categoryList = new SelectList(categories, "Id", "Name");
+
+            // Pass the SelectList to the view using ViewBag.
+            ViewBag.CategoryList = categoryList;
+
             return View();
         }
 
@@ -60,14 +84,35 @@ namespace FestiFindV5.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,Description,CategoryId,Location,Date_Time,Costs,PlacesLeft")] Event @event)
         {
-            if (ModelState.IsValid)
+            // Get the username of the logged-in user (organizer)
+            string organizerUsername = User.Identity.Name;
+
+            // Assuming you have a data store where you associate organizers with usernames
+            var organizer = _context.Organizers.SingleOrDefault(o => o.Name == organizerUsername);
+
+            if (organizer != null)
             {
+                // Set the CategoryId based on the form input
+                @event.CategoryId = Convert.ToInt32(Request.Form["CategoryId"]);
+
+                // Associate the OrganizerID with the event
+                @event.OrganizerId = organizer.Id;
+
+                // Add the event to the context
                 _context.Add(@event);
                 await _context.SaveChangesAsync();
+
+                // Redirect to a suitable page or action
                 return RedirectToAction(nameof(Index));
             }
-            return View(@event);
+            else
+            {
+                // Handle the case where the user is not an organizer
+                // You can return an error message or redirect to a page, as needed
+                return RedirectToAction("ErrorPage");
+            }
         }
+
 
         // GET: Events/Edit/5
         [Authorize(Roles = "Organizer")]
@@ -169,7 +214,7 @@ namespace FestiFindV5.Controllers
         {
           return (_context.Events?.Any(e => e.Id == id)).GetValueOrDefault();
         }
-        public IActionResult CreateOrder(int eventId)
+        public async Task<IActionResult> CreateOrder(int eventId)
         {
             // Get the username of the logged-in user
             string username = User.Identity.Name;
@@ -185,20 +230,29 @@ namespace FestiFindV5.Controllers
                     EventId = eventId,
                 };
 
-                // Save the order to your database
-                _context.Orders.Add(order);
-                _context.SaveChanges();
+                var eventToUpdate = await _context.Events.FindAsync(order.EventId); // Await here to get the actual Event object.
 
-                // Redirect to the Order Detail page for the newly created order
-                return RedirectToAction("Details", "Orders", new { id = order.Id });
+                if (eventToUpdate != null) // Check if the event exists.
+                {
+                    eventToUpdate.ReduceAvailableSpots();
+                    _context.Orders.Add(order);
+                    await _context.SaveChangesAsync(); // Await SaveChangesAsync() for async database operation.
+
+                    // Redirect to the Order Detail page for the newly created order
+                    return RedirectToAction("Details", "Orders", new { id = order.Id });
+                }
+                else
+                {
+                    // Handle the case where the event doesn't exist
+                    return RedirectToAction("ErrorPage");
+                }
             }
             else
             {
                 // Handle the case where the user is not a participant
-                // You can return an error message or redirect to a page, as needed
-                // For example, redirect to a page that displays an error message.
                 return RedirectToAction("ErrorPage");
             }
         }
+
     }
 }

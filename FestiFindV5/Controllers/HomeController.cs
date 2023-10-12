@@ -18,13 +18,23 @@ namespace FestiFindV5.Controllers
 
         public IActionResult Index()
         {
-            // Fetch event data from your database using Entity Framework
-            var events = _context.Events
-                .OrderBy(e => e.Date_Time) // Sort events by date in ascending order
-                .ToList(); // Convert to a list
+            // Fetch event data and include category information using a join
+            var eventsWithCategories = _context.Events
+                .Join(_context.Category,
+                    e => e.CategoryId,
+                    c => c.Id,
+                    (e, c) => new
+                    {
+                        Event = e,
+                        Category = c
+                    })
+                .OrderBy(ec => ec.Event.Date_Time)
+                .ToList();
 
-            return View(events);
+            return View(eventsWithCategories);
         }
+
+
         public IActionResult Calendar(string month)
         {
             DateTime currentDate = DateTime.Today;

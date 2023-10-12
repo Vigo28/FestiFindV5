@@ -153,17 +153,32 @@ namespace FestiFindV5.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Orders == null)
+            if (_context == null)
             {
-                return Problem("Entity set 'ApplicationDbContext.Orders'  is null.");
+                return Problem("Entity context is null.");
             }
+
             var order = await _context.Orders.FindAsync(id);
             if (order != null)
             {
-                _context.Orders.Remove(order);
+                // Call your cancellation logic here (incrementing available spots and removing the order)
+                // and handle the redirection in this action.
+
+                var eventToUpdate = await _context.Events.FindAsync(order.EventId);
+
+                if (eventToUpdate != null)
+                {
+                    eventToUpdate.IncrementAvailableSpots();
+                    _context.Orders.Remove(order);
+                    await _context.SaveChangesAsync();
+                }
+                else
+                {
+                    // Handle the case where the associated event doesn't exist
+                    return RedirectToAction("ErrorPage");
+                }
             }
-            
-            await _context.SaveChangesAsync();
+
             return RedirectToAction(nameof(Index));
         }
 

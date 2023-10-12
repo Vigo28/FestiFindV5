@@ -105,7 +105,7 @@ namespace FestiFindV5.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Image")] Category category)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] Category category, IFormFile NewImage)
         {
             if (id != category.Id)
             {
@@ -116,6 +116,16 @@ namespace FestiFindV5.Controllers
             {
                 try
                 {
+                    if (NewImage != null)
+                    {
+                        // Er is een nieuwe afbeelding geüpload, verwerk deze.
+                        using (var memoryStream = new MemoryStream())
+                        {
+                            await NewImage.CopyToAsync(memoryStream);
+                            category.Image = memoryStream.ToArray();
+                        }
+                    }
+
                     _context.Update(category);
                     await _context.SaveChangesAsync();
                 }
@@ -134,6 +144,7 @@ namespace FestiFindV5.Controllers
             }
             return View(category);
         }
+
 
         // GET: Categories/Delete/5
         public async Task<IActionResult> Delete(int? id)
