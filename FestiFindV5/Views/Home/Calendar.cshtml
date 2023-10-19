@@ -5,6 +5,7 @@
     DateTime startDate = new DateTime(2023, 10, 1); // Corrected month format
 }
 
+@using FestFindV2.Models;
 @using FestiFindV5.Models;
 <body>
     @for (var loopDate = startDate; loopDate <= endDate; loopDate = loopDate.AddMonths(1))
@@ -45,37 +46,35 @@
                 {
                     bool isCurrentMonth = loopDate.Month == currentDate.Month && loopDate.Year == currentDate.Year;
                     bool isCurrentDay = isCurrentMonth && day == currentDate.Day;
-                    string cssClass = isCurrentDay ? "active" : "";
+                    string cssClass = isCurrentDay ? "active" : ""; // Highlight current day
 
                     // Check if the day is within the valid range for the month
                     if (day >= 1 && day <= daysInMonth)
                     {
                         // Check if there is an event for the current date
-                        string eventTitle = "";
-                        string eventUrl = ""; // URL for the event details page
+                        List<Event> eventsForCurrentDate = new List<Event>();
                         foreach (var e in Model)
                         {
                             if (e.Date_Time.Year == loopDate.Year && e.Date_Time.Month == loopDate.Month && e.Date_Time.Day == day)
                             {
-                                eventTitle = e.Name;
-                                eventUrl = "/Events/Details/" + e.Id;
-                                break;
+                                eventsForCurrentDate.Add(e);
                             }
                         }
 
                         <li class="@cssClass">
                             <span>@day</span>
                             <div class="event-title">
-                                @if (!string.IsNullOrEmpty(eventUrl))
+                                @if (eventsForCurrentDate.Count > 0)
                                 {
-                                    <a href="@eventUrl" class="purple-link">@eventTitle</a>
-                                }
-                                else
-                                {
-                                    @eventTitle
+                                    @foreach (var eventItem in eventsForCurrentDate)
+                                    {
+                                        <a href="/Events/Details/@eventItem.Id" class="purple-link">@eventItem.Name</a>
+                                        <br />
+                                    }
                                 }
                             </div>
                         </li>
+
                     }
                 }
             }

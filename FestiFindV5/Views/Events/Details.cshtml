@@ -56,9 +56,18 @@
 </div>
 <br />
 <!-- Add the "Meld je nu aan!" button -->
-<div>
-    <a asp-action="CreateOrder" asp-route-eventId="@Model.Id" class="btn btn-primary">Meld je nu aan!</a>
-</div>
+@if (User.IsInRole("Participant"))
+{
+    <div>
+        <a asp-action="CreateOrder" asp-route-eventId="@Model.Id" class="btn btn-primary">Meld je nu aan!</a>
+    </div>
+}
+@if (!User.IsInRole("Participant"))
+{
+    <div>
+        Meld je eerst aan als participant om je aan te melden voor dit event!
+    </div>
+}
 
 <br />
 <div>

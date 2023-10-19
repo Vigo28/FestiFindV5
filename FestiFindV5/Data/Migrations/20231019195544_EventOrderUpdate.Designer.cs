@@ -4,6 +4,7 @@ using FestiFindV5.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FestiFindV5.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231019195544_EventOrderUpdate")]
+    partial class EventOrderUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -109,8 +112,7 @@ namespace FestiFindV5.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EventId")
-                        .IsUnique();
+                    b.HasIndex("EventId");
 
                     b.HasIndex("ParticipantId");
 
@@ -330,12 +332,10 @@ namespace FestiFindV5.Data.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderKey")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("nvarchar(max)");
@@ -372,12 +372,10 @@ namespace FestiFindV5.Data.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Value")
                         .HasColumnType("nvarchar(max)");
@@ -407,8 +405,8 @@ namespace FestiFindV5.Data.Migrations
             modelBuilder.Entity("FestFindV2.Models.Order", b =>
                 {
                     b.HasOne("FestFindV2.Models.Event", "Event")
-                        .WithOne("order")
-                        .HasForeignKey("FestFindV2.Models.Order", "EventId")
+                        .WithMany()
+                        .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -471,12 +469,6 @@ namespace FestiFindV5.Data.Migrations
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("FestFindV2.Models.Event", b =>
-                {
-                    b.Navigation("order")
                         .IsRequired();
                 });
 

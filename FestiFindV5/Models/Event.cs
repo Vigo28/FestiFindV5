@@ -23,9 +23,8 @@ namespace FestFindV2.Models
         public int? PlacesLeft { get; set; }
         [Required]
         public int? OrganizerId { get; set; }
-        public ICollection<Order>? Orders { get; set; } // Navigation property to the Order entity
-
         public Category Category { get; set; } // Navigation property to the Category entity
+        public Order order { get; set; }
         public Event()
         {
 

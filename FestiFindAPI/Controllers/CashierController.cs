@@ -47,7 +47,7 @@ namespace FestiFindAPI.Controllers
         [HttpPost]
         public void Post(string Name)
         {
-            Cashier c = new Cashier();
+            Cashier c = new();
             c.Name = Name;
             _context.Cashiers.Add(c);
             _context.SaveChanges();
