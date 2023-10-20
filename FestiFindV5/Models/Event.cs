@@ -24,7 +24,6 @@ namespace FestFindV2.Models
         [Required]
         public int? OrganizerId { get; set; }
         public Category Category { get; set; } // Navigation property to the Category entity
-        public Order order { get; set; }
         public Event()
         {
 

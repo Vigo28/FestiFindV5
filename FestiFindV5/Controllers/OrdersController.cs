@@ -179,12 +179,30 @@ namespace FestiFindV5.Controllers
                 }
             }
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(MyOrders));
         }
 
         private bool OrderExists(int id)
         {
           return (_context.Orders?.Any(e => e.Id == id)).GetValueOrDefault();
+        }
+        public async Task<IActionResult> MyOrders()
+        {
+            string participantUsername = User.Identity.Name;
+            var participant = _context.Participants.SingleOrDefault(p => p.Name == participantUsername);
+
+            if (participant == null)
+            {
+                return NotFound(); // Handle the case where the participant doesn't exist.
+            }
+
+            var orders = await _context.Orders
+                .Include(o => o.Participant)
+                .Include(o => o.Event)
+                .Where(o => o.ParticipantId == participant.Id) // Filter by participant's ID
+                .ToListAsync();
+
+            return View(orders);
         }
     }
 }

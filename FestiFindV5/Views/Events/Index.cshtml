@@ -5,36 +5,30 @@
 }
 
 <h1>Events</h1>
-@if (User.IsInRole("Organizer"))
-{
-    <p>
-        <a asp-action="Create">Create New</a>
-    </p>
-}
 
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                Naam
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Description)
+                Beschrijving
             </th>
             <th>
                 Category
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Location)
+                Locatie
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Date_Time)
+                Datum en Tijd
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Costs)
+                Prijs
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.PlacesLeft)
+                Plekken vrij
             </th>
             <th></th>
         </tr>
@@ -58,18 +52,13 @@
                 @Html.DisplayFor(modelItem => item.Date_Time)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Costs)
+                €@Html.DisplayFor(modelItem => item.Costs)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.PlacesLeft)
             </td>
             <td>
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a>
-                    @if (User.IsInRole("Organizer"))
-                    {
-                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                        <a asp-action="Delete" asp-route-id="@item.Id"> Delete</a>
-                    }
             </td>
                     
         </tr>

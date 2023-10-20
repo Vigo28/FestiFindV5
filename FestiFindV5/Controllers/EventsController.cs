@@ -145,28 +145,13 @@ namespace FestiFindV5.Controllers
             {
                 return NotFound();
             }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(@event);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!EventExists((int)@event.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(@event);
+            string organizerUsername = User.Identity.Name;
+            var organizer = _context.Organizers.SingleOrDefault(o => o.Name == organizerUsername);
+            // Associate the OrganizerID with the event
+            @event.OrganizerId = organizer.Id;
+            _context.Update(@event);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Events/Delete/5
@@ -253,6 +238,25 @@ namespace FestiFindV5.Controllers
                 return RedirectToAction("ErrorPage");
             }
         }
+        public async Task<IActionResult> MyEvents()
+        {
+            string organizerUsername = User.Identity.Name;
+            var organizer = _context.Organizers.SingleOrDefault(o => o.Name == organizerUsername);
 
+            if (organizer == null)
+            {
+                return NotFound(); // Handle the case where the organizer doesn't exist.
+            }
+
+            // Fetch the events associated with the organizer.
+            var events = _context.Events.Where(e => e.OrganizerId == organizer.Id).ToList();
+
+            // You can also include the category list in a similar way if needed.
+            var categories = _context.Category.ToList();
+            var categoryList = new SelectList(categories, "Id", "Name");
+            ViewBag.CategoryList = categoryList;
+
+            return View(events);
+        }
     }
 }

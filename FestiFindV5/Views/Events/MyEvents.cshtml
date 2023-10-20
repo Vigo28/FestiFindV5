@@ -1,0 +1,72 @@
+﻿@model IEnumerable<FestFindV2.Models.Event>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Events</h1>
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Naam
+            </th>
+            <th>
+                Beschrijving
+            </th>
+            <th>
+                Category
+            </th>
+            <th>
+                Locatie
+            </th>
+            <th>
+                Datum en Tijd
+            </th>
+            <th>
+                Prijs
+            </th>
+            <th>
+                Plekken vrij
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Category.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Location)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Date_Time)
+                </td>
+                <td>
+                    €@Html.DisplayFor(modelItem => item.Costs)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PlacesLeft)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id"> Delete</a>
+                </td>
+
+            </tr>
+        }
+    </tbody>
+</table>

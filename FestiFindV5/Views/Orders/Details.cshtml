@@ -11,19 +11,19 @@
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Id)
+            Order nummer
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Id)
         </dd>
         <dt class="col-sm-2">
-            Participant
+            Naam
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Participant.Name)
         </dd>
         <dt class="col-sm-2">
-            Event
+            Event naam
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Event.Name)
@@ -31,6 +31,12 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    @if (User.IsInRole("Participant"))
+    {
+        <a asp-action="MyOrders">Uw orders weergeven</a>
+    }
+    @if (User.IsInRole("Organizer"))
+    {
+        <a asp-action="Index">Orders weergeven</a>
+    }
 </div>
