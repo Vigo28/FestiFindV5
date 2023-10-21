@@ -55,6 +55,7 @@ namespace FestiFindV5.Data.Migrations
                 table: "Orders",
                 column: "EventId",
                 unique: true);
+            migrationBuilder.AddPrimaryKey("PK_AspNetUserTokens", "AspNetUserTokens", new string[] { "UserId", "LoginProvider", "Name" });
         }
 
         /// <inheritdoc />

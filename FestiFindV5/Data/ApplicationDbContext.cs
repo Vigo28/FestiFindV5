@@ -14,7 +14,6 @@ namespace FestiFindV5.Data
         public DbSet<Event> Events { get; set; }
         public DbSet<Organizer> Organizers { get; set; }
         public DbSet<Order> Orders { get; set; }
-        public DbSet<Cashier> Cashiers { get; set; }
         public DbSet<Participant> Participants { get; set; }
         public DbSet<Category> Category { get; set; }
 
