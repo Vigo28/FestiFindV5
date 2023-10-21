@@ -129,6 +129,14 @@ namespace FestiFindV5.Controllers
             {
                 return NotFound();
             }
+            // Fetch the list of categories from your data source (replace _context and Categories with your actual data context and model).
+            var categories = _context.Category.ToList();
+
+            // Create a SelectList containing category names.
+            var categoryList = new SelectList(categories, "Id", "Name");
+
+            // Pass the SelectList to the view using ViewBag.
+            ViewBag.CategoryList = categoryList;
             return View(@event);
         }
 
