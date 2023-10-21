@@ -36,9 +36,6 @@
                         @if (User.IsInRole("Organizer"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-purple" asp-area="" asp-controller="Orders" asp-action="Index">Orders</a>
-                            </li>
-                            <li class="nav-item">
                                 <a class="nav-link text-purple" asp-area="" asp-controller="Categories" asp-action="Index">Categories</a>
                             </li>
                             <li class="nav-item">
@@ -48,12 +45,18 @@
                                 <a class="nav-link text-purple" asp-area="" asp-controller="Events" asp-action="MyEvents">My events</a>
                             </li>
                         }
-                        <li class="nav-item">
-                            <a class="nav-link text-purple" asp-area="" asp-controller="Participants" asp-action="Index">Participants</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-purple" asp-area="" asp-controller="Organizers" asp-action="Index">Organizers</a>
-                        </li>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-purple" asp-area="" asp-controller="Orders" asp-action="Index">Orders</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-purple" asp-area="" asp-controller="Participants" asp-action="Index">Participants</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-purple" asp-area="" asp-controller="Organizers" asp-action="Index">Organizers</a>
+                            </li>
+                        }
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>

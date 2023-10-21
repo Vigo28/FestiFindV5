@@ -34,34 +34,44 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Category.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Location)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Date_Time)
-            </td>
-            <td>
-                €@Html.DisplayFor(modelItem => item.Costs)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PlacesLeft)
-            </td>
-            <td>
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a>
-            </td>
-                    
-        </tr>
-}
+        @foreach (var item in Model.OrderBy(e => e.Date_Time))
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Category.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Location)
+                </td>
+                    @if (item.Date_Time < DateTime.Now)
+                    {
+                    <td>Al geweest</td>
+                    }
+                    else
+                    {
+                    <td>@Html.DisplayFor(modelItem => item.Date_Time)</td>
+                    }
+                <td>
+                    €@Html.DisplayFor(modelItem => item.Costs)
+                </td>
+                    @if (item.PlacesLeft == 0)
+                    {
+                    <td>Uitverkocht!</td>
+                    }
+                    else
+                    {
+                    <td>@Html.DisplayFor(modelItem => item.PlacesLeft)</td>
+                    }
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

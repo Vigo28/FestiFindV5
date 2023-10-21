@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FestFindV2.Models;
 using FestiFindV5.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FestiFindV5.Controllers
 {
@@ -20,6 +21,7 @@ namespace FestiFindV5.Controllers
         }
 
         // GET: Orders
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
             var orders = await _context.Orders
@@ -29,8 +31,6 @@ namespace FestiFindV5.Controllers
 
             return View(orders);
         }
-
-
 
         // GET: Orders/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -55,6 +55,7 @@ namespace FestiFindV5.Controllers
 
 
         // GET: Orders/Create
+        [Authorize(Roles = "Participant")]
         public IActionResult Create()
         {
             ViewBag.ParticipantId = new SelectList(_context.Participants, "Id", "Name");
@@ -204,5 +205,16 @@ namespace FestiFindV5.Controllers
 
             return View(orders);
         }
+        public async Task<IActionResult> EventOrders(int id)
+        {
+            var orders = await _context.Orders
+                .Include(o => o.Participant)
+                .Include(o => o.Event)
+                .Where(o => o.EventId == id) // Filter by EventId
+                .ToListAsync();
+
+            return View(orders);
+        }
+
     }
 }

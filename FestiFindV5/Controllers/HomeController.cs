@@ -18,8 +18,11 @@ namespace FestiFindV5.Controllers
 
         public IActionResult Index()
         {
+            // Get the current date and time
+            DateTime currentDate = DateTime.Now;
+
             // Fetch event data and include category information using a join
-            var eventsWithCategories = _context.Events
+            var upcomingEventsWithCategories = _context.Events
                 .Join(_context.Category,
                     e => e.CategoryId,
                     c => c.Id,
@@ -28,11 +31,13 @@ namespace FestiFindV5.Controllers
                         Event = e,
                         Category = c
                     })
+                .Where(ec => ec.Event.Date_Time > currentDate) // Filter for upcoming events
                 .OrderBy(ec => ec.Event.Date_Time)
                 .ToList();
 
-            return View(eventsWithCategories);
+            return View(upcomingEventsWithCategories);
         }
+
 
 
         public IActionResult Calendar(string month)

@@ -150,6 +150,11 @@ namespace FestiFindV5.Areas.Identity.Pages.Account
                         await _userManager.AddToRoleAsync(user, "Participant");
 
                     }
+                    else if (Input.Role == "admin")
+                    {
+                        await _userManager.AddToRoleAsync(user, "Admin");
+
+                    }
 
                     // Save changes to the respective tables (organizer or participant)
                     await _dbContext.SaveChangesAsync();

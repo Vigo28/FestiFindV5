@@ -131,6 +131,10 @@ namespace FestiFindV5.Areas.Identity.Pages.Account
                         _logger.LogInformation("Organizer logged in.");
                         return LocalRedirect(returnUrl);
                     }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    }
                 }
                 else if (participantUser != null)
                 {
@@ -141,6 +145,24 @@ namespace FestiFindV5.Areas.Identity.Pages.Account
                     {
                         _logger.LogInformation("Participant logged in.");
                         return LocalRedirect(returnUrl);
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    }
+                }
+                else if (organizerUser == null && participantUser == null)
+                {
+                    //Check for admin
+                    var result = await _signInManager.PasswordSignInAsync(Input.Name, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+                    if (result.Succeeded)
+                    {
+                        _logger.LogInformation("Admin logged in.");
+                        return LocalRedirect(returnUrl);
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, "Invalid login attempt.");
                     }
                 }
                 else

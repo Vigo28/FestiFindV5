@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FestFindV2.Models;
 using FestiFindV5.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FestiFindV5.Controllers
 {
@@ -20,6 +21,7 @@ namespace FestiFindV5.Controllers
         }
 
         // GET: Participants
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
               return _context.Participants != null ? 
@@ -28,6 +30,7 @@ namespace FestiFindV5.Controllers
         }
 
         // GET: Participants/Details/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Participants == null)
@@ -46,6 +49,7 @@ namespace FestiFindV5.Controllers
         }
 
         // GET: Participants/Create
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View();
@@ -68,6 +72,7 @@ namespace FestiFindV5.Controllers
         }
 
         // GET: Participants/Edit/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Participants == null)
@@ -119,6 +124,7 @@ namespace FestiFindV5.Controllers
         }
 
         // GET: Participants/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Participants == null)

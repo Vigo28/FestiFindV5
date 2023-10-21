@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using FestFindV2.Models;
 using FestiFindV5.Data;
 using Microsoft.AspNetCore.Authorization;
+using FestiFindV5.Controllers;
 
 namespace FestiFindV5.Controllers
 {
@@ -60,9 +61,9 @@ namespace FestiFindV5.Controllers
             ViewBag.CategoryList = categoryList;
             return View(@event);
         }
-        [Authorize(Roles = "Organizer")]
 
         // GET: Events/Create
+        [Authorize(Roles = "Organizer")]
         public IActionResult Create()
         {
             // Fetch the list of categories from your data source (replace _context and Categories with your actual data context and model).
@@ -116,7 +117,6 @@ namespace FestiFindV5.Controllers
 
         // GET: Events/Edit/5
         [Authorize(Roles = "Organizer")]
-
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Events == null)
@@ -156,7 +156,6 @@ namespace FestiFindV5.Controllers
 
         // GET: Events/Delete/5
         [Authorize(Roles = "Organizer")]
-
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Events == null)
@@ -257,6 +256,11 @@ namespace FestiFindV5.Controllers
             ViewBag.CategoryList = categoryList;
 
             return View(events);
+        }
+        public IActionResult ShowOrders(int id)
+        {
+            // Roep EventOrders methode aan om de orders van het opgegeven evenement op te halen
+            return RedirectToAction("EventOrders", "Orders", new { id });
         }
     }
 }
