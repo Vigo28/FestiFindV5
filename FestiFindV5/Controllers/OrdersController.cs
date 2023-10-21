@@ -205,16 +205,40 @@ namespace FestiFindV5.Controllers
 
             return View(orders);
         }
-        public async Task<IActionResult> EventOrders(int id)
+        public async Task<IActionResult> EventOrders(int id, string search)
         {
-            var orders = await _context.Orders
+            var query = _context.Orders
                 .Include(o => o.Participant)
                 .Include(o => o.Event)
-                .Where(o => o.EventId == id) // Filter by EventId
-                .ToListAsync();
+                .Where(o => o.EventId == id); // Filter by EventId
+
+            if (!string.IsNullOrEmpty(search))
+            {
+                query = query.Where(o => o.Id.ToString() == search);
+            }
+
+            var orders = await query.ToListAsync();
 
             return View(orders);
         }
+        public IActionResult UpdatePayed(int id)
+        {
+            // Fetch the order from the database
+            var order = _context.Orders.FirstOrDefault(o => o.Id == id);
+
+            if (order != null)
+            {
+                // Toggle the "Payed" status
+                order.Payed = !order.Payed;
+
+                // Save changes to the database
+                _context.SaveChanges();
+            }
+
+            // Redirect back to the original page or wherever you want
+            return RedirectToAction("EventOrders", new { id = order.EventId });
+        }
+
 
     }
 }

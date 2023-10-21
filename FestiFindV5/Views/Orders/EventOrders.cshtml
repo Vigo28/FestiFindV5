@@ -6,6 +6,23 @@
 
 <h1>Orders</h1>
 
+<!-- Form for searching and clearing -->
+<form method="get" asp-action="EventOrders" asp-controller="Orders">
+    <div class="form-group">
+        <input type="text" name="search" placeholder="Search by Order Number" class="form-control" />
+    </div>
+    <br />
+    <div class="form-group" style="display: inline-block;">
+        <button type="submit" class="btn btn-primary">Zoek</button>
+    </div>
+    <div class="form-group" style="display: inline-block;">
+        <button type="submit" class="btn btn-secondary" name="clear" value="true">Clear</button>
+    </div>
+</form>
+
+<br />
+<br />
+
 <table class="table">
     <thead>
         <tr>
@@ -16,7 +33,10 @@
                 Participant naam
             </th>
             <th>
-                Event Naam
+                Betaald
+            </th>
+            <th>
+
             </th>
         </tr>
     </thead>
@@ -31,12 +51,29 @@
                     @Html.DisplayFor(modelItem => item.Participant.Name)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Event.Name)
+                    @Html.DisplayFor(modelItem => item.Payed)
+                </td>
+                <td>
+                    @if (item.Payed)
+                    {
+                        <form method="post" asp-action="UpdatePayed" asp-controller="Orders">
+                            <input type="hidden" name="id" value="@item.Id" />
+                            <button type="submit" class="btn btn-secondary">Betaald</button>
+                        </form>
+                    }
+                    @if (!item.Payed)
+                    {
+                        <form method="post" asp-action="UpdatePayed" asp-controller="Orders">
+                            <input type="hidden" name="id" value="@item.Id" />
+                            <button type="submit" class="btn btn-primary">Betaald</button>
+                        </form>
+                    }
                 </td>
             </tr>
         }
     </tbody>
 </table>
+
 <div>
-    <a asp-controller ="Events" asp-action="MyEvents">Terug</a>
+    <a asp-controller="Events" asp-action="MyEvents">Terug</a>
 </div>
