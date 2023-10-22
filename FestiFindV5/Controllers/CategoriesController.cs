@@ -29,24 +29,6 @@ namespace FestiFindV5.Controllers
                           Problem("Entity set 'ApplicationDbContext.Category'  is null.");
         }
 
-        // GET: Categories/Details/5
-        [Authorize(Roles = "Organizer")]
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null || _context.Category == null)
-            {
-                return NotFound();
-            }
-
-            var category = await _context.Category
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (category == null)
-            {
-                return NotFound();
-            }
-
-            return View(category);
-        }
 
         // GET: Categories/Create
         [Authorize(Roles = "Organizer")]
