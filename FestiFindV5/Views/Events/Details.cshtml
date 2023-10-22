@@ -75,7 +75,7 @@ else
         @if (User.IsInRole("Participant"))
         {
             <div>
-                <a asp-action="CreateOrder" asp-route-eventId="@Model.Id" class="btn btn-primary">Meld je nu aan!</a>
+                <a asp-action="CreateOrder" asp-route-eventId="@Model.Id" class="btn btn-primary">Reserveer ticket!</a>
             </div>
         }
         else

@@ -104,7 +104,7 @@ namespace FestiFindV5.Controllers
                 await _context.SaveChangesAsync();
 
                 // Redirect to a suitable page or action
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(MyEvents));
             }
             else
             {
@@ -159,7 +159,7 @@ namespace FestiFindV5.Controllers
             @event.OrganizerId = organizer.Id;
             _context.Update(@event);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(MyEvents));
         }
 
         // GET: Events/Delete/5
@@ -199,7 +199,7 @@ namespace FestiFindV5.Controllers
             }
             
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(MyEvents));
         }
 
         private bool EventExists(int id)
